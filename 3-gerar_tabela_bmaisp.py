@@ -39,9 +39,6 @@ def gerar_projetos_bmaisp(recorte):
     projetos_filtro = projetos_filtro[
         (projetos_filtro['brasil_mais_produtivo'].isin(['Sim']))
         ]
-    projetos_filtro = projetos_filtro.drop([
-        "amazonia", "descarbonizacao", "nota_avaliacao", "observacoes",
-        "tags", "data_avaliacao", "cooperacao_internacional"])
     projetos_filtro = projetos_filtro[[
         "codigo_projeto", "unidade_embrapii", "data_contrato", "data_inicio", "data_termino",
         "status", "tipo_projeto", "parceria_programa", "uso_recurso_obrigatorio", "tecnologia_habilitadora",
@@ -67,7 +64,7 @@ def gerar_projetos_empresas_bmaisp(projetos_filtro):
 def gerar_empresas_bmaisp(projetos_empresas_filtro):
 
     # carregar planilha
-    empresas = pd.read_excel('info_empresas.xlsx')
+    empresas = pd.read_excel('informacoes_empresas.xlsx')
 
     # filtra para somente empresas que estão em projetos NIB
     empresas_filtro = empresas[
@@ -75,7 +72,7 @@ def gerar_empresas_bmaisp(projetos_empresas_filtro):
         ]
     
     # outros filtros
-    empresas_filtro = empresas_filtro.drop(['novo'])
+    empresas_filtro = empresas_filtro.drop(columns=['novo'])
 
     # retorno da função
     return empresas_filtro

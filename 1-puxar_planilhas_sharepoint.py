@@ -15,7 +15,7 @@ sys.path.append(PATH_OFFICE)
 def puxar_planilhas():
     projetos = get_file('portfolio.xlsx', 'DWPII/srinfo', ROOT)
     projetos_empresas = get_file('projetos_empresas.xlsx', 'DWPII/srinfo', ROOT)
-    empresas = get_file('info_empresas.xlsx', 'DWPII/srinfo', ROOT)
+    empresas = get_file('informacoes_empresas.xlsx', 'DWPII/srinfo', ROOT)
     print('Download concluído')
 
 puxar_planilhas()
