@@ -39,6 +39,14 @@ def gerar_projetos_nib(recorte):
     projetos_filtro = projetos_filtro[
         ~(projetos_filtro['missoes_cndi'].isin(['Não definido', 'Não se aplica']))
         ]
+    projetos_filtro = projetos_filtro.drop([
+        "amazonia", "descarbonizacao", "brasil_mais_produtivo", "nota_avaliacao",
+        "observacoes", "tags", "data_avaliacao", "cooperacao_internacional"])
+    projetos_filtro = projetos_filtro[[
+        "codigo_projeto", "unidade_embrapii", "data_contrato", "data_inicio", "data_termino",
+        "status", "tipo_projeto", "parceria_programa", "uso_recurso_obrigatorio", "tecnologia_habilitadora", "missoes_cndi",
+        "area_aplicacao", "projeto", "trl_inicial", "trl_final", "valor_embrapii", "valor_empresa", "valor_unidade_embrapii",
+        "titulo", "titulo_publico", "objetivo", "descricao_publica", "data_extracao_dados"]]
     
     # retorno da função
     return projetos_filtro
@@ -66,6 +74,9 @@ def gerar_empresas_nib(projetos_empresas_filtro):
         empresas['cnpj'].isin(projetos_empresas_filtro['cnpj'])
         ]
     
+    # outros filtros
+    empresas_filtro = empresas_filtro.drop(['novo'])
+
     # retorno da função
     return empresas_filtro
     

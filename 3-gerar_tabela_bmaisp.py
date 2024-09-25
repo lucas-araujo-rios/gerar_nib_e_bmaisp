@@ -37,8 +37,16 @@ def gerar_projetos_bmaisp(recorte):
 
     # aplica outros filtros
     projetos_filtro = projetos_filtro[
-        ~(projetos_filtro['missoes_cndi'].isin(['Não definido', 'Não se aplica']))
+        (projetos_filtro['brasil_mais_produtivo'].isin(['Sim']))
         ]
+    projetos_filtro = projetos_filtro.drop([
+        "amazonia", "descarbonizacao", "nota_avaliacao", "observacoes",
+        "tags", "data_avaliacao", "cooperacao_internacional"])
+    projetos_filtro = projetos_filtro[[
+        "codigo_projeto", "unidade_embrapii", "data_contrato", "data_inicio", "data_termino",
+        "status", "tipo_projeto", "parceria_programa", "uso_recurso_obrigatorio", "tecnologia_habilitadora",
+        "brasil_mais_produtivo", "area_aplicacao", "projeto", "trl_inicial", "trl_final", "valor_embrapii", "valor_empresa",
+        "valor_unidade_embrapii", "titulo", "titulo_publico", "objetivo", "descricao_publica", "data_extracao_dados"]]
     
     # retorno da função
     return projetos_filtro
@@ -66,10 +74,13 @@ def gerar_empresas_bmaisp(projetos_empresas_filtro):
         empresas['cnpj'].isin(projetos_empresas_filtro['cnpj'])
         ]
     
+    # outros filtros
+    empresas_filtro = empresas_filtro.drop(['novo'])
+
     # retorno da função
     return empresas_filtro
     
-    
+
 # define recorte e chama funções
 recorte = definir_recorte()
 projetos_filtro = gerar_projetos_bmaisp(recorte)
