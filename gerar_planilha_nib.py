@@ -13,7 +13,7 @@ def definir_recorte():
     while True:
         try: 
             data_fim = pd.to_datetime(
-                input('Insira a data de fim do recorte que deseja\n(OBS: no formato AAAA-MM-DD): '),
+                input('[NIB] Insira a data de fim do recorte que deseja\n(OBS: no formato AAAA-MM-DD): '),
                 format='%Y-%m-%d'
                 )
             break
@@ -25,7 +25,7 @@ def definir_recorte():
 def gerar_projetos_nib(recorte):
 
     # carregar planilha
-    projetos = pd.read_excel('portfolio.xlsx')
+    projetos = pd.read_excel('inputs\\portfolio.xlsx')
 
     # converte coluna de data em tipo de data
     projetos['data_contrato'] = pd.to_datetime(projetos['data_contrato'])
@@ -51,7 +51,7 @@ def gerar_projetos_nib(recorte):
 def gerar_projetos_empresas_nib(projetos_filtro):
 
     # carregar planilha
-    projetos_empresas = pd.read_excel('projetos_empresas.xlsx')
+    projetos_empresas = pd.read_excel('inputs\\projetos_empresas.xlsx')
 
     # filtra para somente empresas que estão em projetos NIB
     projetos_empresas_filtro = projetos_empresas[
@@ -64,7 +64,7 @@ def gerar_projetos_empresas_nib(projetos_filtro):
 def gerar_empresas_nib(projetos_empresas_filtro):
 
     # carregar planilha
-    empresas = pd.read_excel('informacoes_empresas.xlsx')
+    empresas = pd.read_excel('inputs\\informacoes_empresas.xlsx')
 
     # filtra para somente empresas que estão em projetos NIB
     empresas_filtro = empresas[
@@ -78,18 +78,20 @@ def gerar_empresas_nib(projetos_empresas_filtro):
     return empresas_filtro
     
 
-# define recorte e chama funções
-recorte = definir_recorte()
-projetos_filtro = gerar_projetos_nib(recorte)
-projetos_empresas_filtro = gerar_projetos_empresas_nib(projetos_filtro)
-empresas_filtro = gerar_empresas_nib(projetos_empresas_filtro)
+def gerar_planilha_nib():
+    # define recorte e chama funções
+    recorte = definir_recorte()
+    projetos_filtro = gerar_projetos_nib(recorte)
+    projetos_empresas_filtro = gerar_projetos_empresas_nib(projetos_filtro)
+    empresas_filtro = gerar_empresas_nib(projetos_empresas_filtro)
 
-# exporta excel
-destino_arquivo = f'embrapii_portfolio_projetos_nib_{recorte[1].strftime('%Y.%m.%d')}.xlsx'
-with pd.ExcelWriter(destino_arquivo, engine='openpyxl') as writer:
-    projetos_filtro.to_excel(writer, sheet_name='portfolio_projetos', index=False)  
-    projetos_empresas_filtro.to_excel(writer, sheet_name='projetos_empresas', index=False)
-    empresas_filtro.to_excel(writer, sheet_name='dados_empresas', index=False)
+    # exporta excel
+    today = datetime.today()
+    destino_arquivo = f'outputs\\embrapii_portfolio_nib_{recorte[1].strftime('%Y.%m.%d')}_gerado_em_{today.strftime('%Y.%m.%d')}.xlsx'
+    with pd.ExcelWriter(destino_arquivo, engine='openpyxl') as writer:
+        projetos_filtro.to_excel(writer, sheet_name='portfolio_projetos', index=False)  
+        projetos_empresas_filtro.to_excel(writer, sheet_name='projetos_empresas', index=False)
+        empresas_filtro.to_excel(writer, sheet_name='dados_empresas', index=False)
 
-# reporta sucesso
-print(f'Planilha filtrada do NIB exportada com sucesso para o caminho:\n{destino_arquivo}.')
+    # reporta sucesso
+    print(f'Planilha filtrada do NIB gerada com sucesso.')
