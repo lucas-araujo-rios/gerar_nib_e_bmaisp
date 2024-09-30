@@ -94,4 +94,4 @@ def gerar_planilha_nib():
         empresas_filtro.to_excel(writer, sheet_name='dados_empresas', index=False)
 
     # reporta sucesso
-    print(f'Planilha filtrada do NIB gerada com sucesso.')
+    print(f'Planilha do NIB gerada com sucesso.')

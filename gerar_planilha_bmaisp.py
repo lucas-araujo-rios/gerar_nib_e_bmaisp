@@ -9,7 +9,7 @@ load_dotenv()
 
 def definir_recorte():
     # define datas de início e fim do recorte
-    data_inicio = pd.to_datetime('2023-01-01')
+    data_inicio = pd.to_datetime('2023-11-16')
     while True:
         try: 
             data_fim = pd.to_datetime(
@@ -77,7 +77,6 @@ def gerar_empresas_bmaisp(projetos_empresas_filtro):
     # retorno da função
     return empresas_filtro
     
-
 def gerar_planilha_bmaisp():
     # define recorte e chama funções
     recorte = definir_recorte()
