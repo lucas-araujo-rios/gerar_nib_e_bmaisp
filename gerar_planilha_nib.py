@@ -56,7 +56,9 @@ def gerar_projetos_empresas_nib(projetos_filtro):
     # filtra para somente empresas que estão em projetos NIB
     projetos_empresas_filtro = projetos_empresas[
         projetos_empresas['codigo_projeto'].isin(projetos_filtro['codigo_projeto'])
-        ]
+    ]
+
+    
     
     # retorno da função
     return projetos_empresas_filtro

@@ -33,17 +33,29 @@ def gerar_projetos_bmaisp(recorte):
     # aplica filtros de data
     projetos_filtro = projetos[
         (projetos['data_contrato'] > recorte[0]) & (projetos['data_contrato'] < recorte[1])
-        ]
+    ]
 
     # aplica outros filtros
     projetos_filtro = projetos_filtro[
         (projetos_filtro['brasil_mais_produtivo'].isin(['Sim']))
-        ]
+    ]
+    
+    #aplica filtro de status
+    projetos_filtro = projetos_filtro[
+        ~projetos_filtro['status'].isin(['Cancelado', 'Suspenso'])
+    ]
+
+    # transforma todos os status para "Em andamento"
+    projetos_filtro['status'] = 'Em andamento'
+
+    # projetos_filtro = projetos_filtro[[
+    #     "codigo_projeto", "unidade_embrapii", "data_contrato", "data_inicio", "data_termino",
+    #     "status", "tipo_projeto", "parceria_programa", "uso_recurso_obrigatorio", "tecnologia_habilitadora",
+    #     "brasil_mais_produtivo", "area_aplicacao", "projeto", "trl_inicial", "trl_final", "valor_embrapii", "valor_empresa",
+    #     "valor_unidade_embrapii", "titulo", "titulo_publico", "objetivo", "descricao_publica", "data_extracao_dados"]]
     projetos_filtro = projetos_filtro[[
-        "codigo_projeto", "unidade_embrapii", "data_contrato", "data_inicio", "data_termino",
-        "status", "tipo_projeto", "parceria_programa", "uso_recurso_obrigatorio", "tecnologia_habilitadora",
-        "brasil_mais_produtivo", "area_aplicacao", "projeto", "trl_inicial", "trl_final", "valor_embrapii", "valor_empresa",
-        "valor_unidade_embrapii", "titulo", "titulo_publico", "objetivo", "descricao_publica", "data_extracao_dados"]]
+        "codigo_projeto", "data_contrato", "status", "tecnologia_habilitadora",
+        "valor_embrapii", "valor_empresa", "valor_sebrae", "valor_unidade_embrapii", "data_extracao_dados"]]
     
     # retorno da função
     return projetos_filtro
@@ -73,6 +85,25 @@ def gerar_empresas_bmaisp(projetos_empresas_filtro):
     
     # outros filtros
     empresas_filtro = empresas_filtro.drop(columns=['novo'])
+
+    # carregar planilha
+    cnae_ibge = pd.read_excel('inputs\\cnae_ibge.xlsx')
+
+    # adicionar colunas nome_secao e nome_divisao ao empresas_filtro usando merge
+    empresas_filtro = empresas_filtro.merge(
+        cnae_ibge[['subclasse2', 'nome_secao', 'nome_divisao']],
+        left_on='cnae_subclasse',
+        right_on='subclasse2',
+        how='left'
+    )
+    
+    # remover a coluna 'subclasse2' se necessário
+    empresas_filtro = empresas_filtro.drop(columns=['subclasse2'])
+
+        # aplica filtro para remover empresas com porte "Grande"
+    empresas_filtro = empresas_filtro[
+        ~empresas_filtro['porte'].isin(['Grande'])
+    ]
 
     # retorno da função
     return empresas_filtro

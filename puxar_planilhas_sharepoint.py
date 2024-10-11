@@ -21,6 +21,7 @@ def puxar_planilhas():
     get_file('portfolio.xlsx', 'DWPII/srinfo', inputs)
     get_file('projetos_empresas.xlsx', 'DWPII/srinfo', inputs)
     get_file('informacoes_empresas.xlsx', 'DWPII/srinfo', inputs)
+    get_file('cnae_ibge.xlsx', 'DWPII/lookup_tables', inputs)
     print('Download concluído')
 
 def apagar_arquivos_pasta(caminho_pasta):
